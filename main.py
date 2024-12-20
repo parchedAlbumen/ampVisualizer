@@ -9,6 +9,8 @@ y, sr = librosa.load("mhmhmm.mp3")
 tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
 print(beat_frames)
 
+print("hello world!")
+
 #duration 
 duration = librosa.get_duration(y=y, sr=sr)
 # print(duration)
