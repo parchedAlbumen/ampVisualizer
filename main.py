@@ -7,18 +7,30 @@ import numpy as np
 y, sr = librosa.load("mhmhmm.mp3")
 
 spectro = np.abs(librosa.stft(y))
-print(spectro)
+# print(spectro)
 
 max_freq_array = np.array([])
 
-for t in range(spectro.shape[1]): 
-    max_freq = np.max(np.abs(spectro[:, t]))
-    np.append(max_freq_array, max_freq)
+#very very wrong, each spectro[index] represents the OVERALL frequency for that range of hertz
+#I want to see how the hertz progress OVER TIME not find the highest frequency at the specific hertz
+#meaning, "go play with the [][] second dimension of spectro, because it shows you the progress over time"
+#----------------------------------------------------------------------------
+# for i in range(0, spectro.shape[1]):
+#     if (i == spectro.shape[1]): 
+#         print("Hallo")
+#     else: 
+#         max_freq = np.max(np.abs(spectro[i]))
+#         np.append(max_freq_array, max_freq)
 
-#let's check if its arraying like how i want it to array
-for i in max_freq_array:
-    print(i) 
+print(np.max(spectro[0]))
+# print(max_freq_array)
+# #let's check if its arraying like how i want it to array
+# for i in max_freq_array:
+#     print(i + '\n')
 
+# for i in range(1,50):
+#     print(max_freq_array[i])
+#----------------------------------------------------------------------------
 #convert time series amplitude to decibels   
 decibels = abs(librosa.amplitude_to_db(np.abs(spectro)))
 
