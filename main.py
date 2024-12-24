@@ -9,28 +9,20 @@ y, sr = librosa.load("mhmhmm.mp3")
 spectro = np.abs(librosa.stft(y))
 # print(spectro)
 
-max_freq_array = np.array([])
+#creates a simple list so I can append later
+max_freq_array = []
+print(type(spectro.shape[1])) #total amount of time frame is 7315
 
-#very very wrong, each spectro[index] represents the OVERALL frequency for that range of hertz
-#I want to see how the hertz progress OVER TIME not find the highest frequency at the specific hertz
-#meaning, "go play with the [][] second dimension of spectro, because it shows you the progress over time"
-#----------------------------------------------------------------------------
-# for i in range(0, spectro.shape[1]):
-#     if (i == spectro.shape[1]): 
-#         print("Hallo")
-#     else: 
-#         max_freq = np.max(np.abs(spectro[i]))
-#         np.append(max_freq_array, max_freq)
+#grabs the highest frequency from 60hz to 260hz because I think the range of any normal singers 
+for i in range(spectro.shape[1]):
+    highest_freq = np.max(np.abs(spectro[6:27, i])) #idk why its not [][]
+    max_freq_array.append(highest_freq)
 
-print(np.max(spectro[0]))
-# print(max_freq_array)
-# #let's check if its arraying like how i want it to array
-# for i in max_freq_array:
-#     print(i + '\n')
+max_freq_array = np.array(max_freq_array)  #yep I think i am satisfied with these values 
+#these values are in frequencies, so convert to decibels, please 
 
-# for i in range(1,50):
-#     print(max_freq_array[i])
-#----------------------------------------------------------------------------
+#NEXT GOAL: convert to decibels, then figure out how to animate the voice 
+
 #convert time series amplitude to decibels   
 decibels = abs(librosa.amplitude_to_db(np.abs(spectro)))
 
