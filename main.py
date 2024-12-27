@@ -11,8 +11,6 @@ spectro = np.abs(librosa.stft(y))
 
 #creates a simple list so I can append later
 max_freq_array = []
-print(type(spectro.shape[1])) #total amount of time frame is 7315
-
 #grabs the highest frequency from 60hz to 260hz because I think the range of any normal singers 
 for i in range(spectro.shape[1]):
     highest_freq = np.max(np.abs(spectro[6:27, i])) #idk why its not [][]
@@ -21,18 +19,18 @@ for i in range(spectro.shape[1]):
 max_freq_array = np.array(max_freq_array)  #yep I think i am satisfied with these values 
 #these values are in frequencies, so convert to decibels, please 
 
-#NEXT GOAL: convert to decibels, then figure out how to animate the voice 
-
-#convert time series amplitude to decibels   
-decibels = abs(librosa.amplitude_to_db(np.abs(spectro)))
+#converts the frequencies to decibels
+decibel_array = np.abs(librosa.amplitude_to_db(np.abs(max_freq_array)))
 
 # grabs the tempo and beat frame (wtv beatframe mean)
 tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
-# print(beat_frames)
+beat_times = librosa.frames_to_time(beat_frames, sr=sr)
 
-#duration 
+#NEXT GOAL: I WANT TO GRAB THE SPECIFIC DECIBEL PER TIME FRAME USING THE BEAT TIME, so convert beat time to frames first, and
+#figure out a way to find the time frame
+#and figure out how to animate the voice 
+#duration
 duration = librosa.get_duration(y=y, sr=sr)
-# print(duration)
 
 # beat_times = librosa.frames_to_time(beat_frames, sr=sr)
 # for time in beat_times:     
