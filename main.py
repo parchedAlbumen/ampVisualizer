@@ -1,6 +1,7 @@
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
+import pygame
 
 #time series - an audio signal denoted by y; y[t] is amplitude of the waveform at sample t
 #sampling rate - number of samples per second of a time series ??
