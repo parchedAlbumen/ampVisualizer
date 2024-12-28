@@ -2,10 +2,24 @@ import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 import pygame
+import random
+
+def random_col():
+    rand = random.randint(1, 4)
+    match rand:
+        case 1:
+            return (200,200,200)
+        case 2:
+            return (100, 0 , 100)
+        case 3: 
+            return (0,0,200)
+        case _:
+            return (0,200,10)
 
 #time series - an audio signal denoted by y; y[t] is amplitude of the waveform at sample t
+le_file = "saturn.mp3"
 #sampling rate - number of samples per second of a time series ??
-y, sr = librosa.load("mhmhmm.mp3")
+y, sr = librosa.load(le_file)
 
 spectro = np.abs(librosa.stft(y))
 # print(spectro)
@@ -14,7 +28,7 @@ spectro = np.abs(librosa.stft(y))
 max_freq_array = []
 #grabs the highest frequency from 60hz to 260hz because I think the range of any normal singers 
 for i in range(spectro.shape[1]):
-    highest_freq = np.max(np.abs(spectro[6:27, i])) #idk why its not [][]
+    highest_freq = np.max(np.abs(spectro[6:45, i])) #idk why its not [][]
     max_freq_array.append(highest_freq)
 
 max_freq_array = np.array(max_freq_array)  #yep I think i am satisfied with these values 
@@ -37,23 +51,22 @@ pygame.init()
 pygame.mixer.init()
 
 #allows the song to be played here
-pygame.mixer.music.load("mhmhmm.mp3")
+pygame.mixer.music.load(le_file)
 pygame.mixer.music.play()
 
 window = pygame.display.set_mode((500,500))
 clock = pygame.time.Clock()
 
-red = (200,200,200)
-
 circleX = 250
 circleY = 250
-radius = 10 #change this to the specific amplitude i want 
+radius = 10.0 #change this to the specific amplitude i want 
 
 active = True
 
 #continue in making the song and change of decibel to match 
 while active:  #while playing 
    #event handling part
+    window.fill((0,0,0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             active = False
@@ -63,8 +76,9 @@ while active:  #while playing
 
     #i dont get really get this numpy part 
     decibel_index = np.searchsorted(time_array, current_sec) 
-    
-    pygame.draw.circle(window,red,(circleX,circleY), radius) # DRAW CIRCLE
+    radius = float(decibel_array[decibel_index])
+    print(radius)
+    pygame.draw.circle(window,(100,100,100),(circleX,circleY), radius) # DRAW CIRCLE
 
     pygame.display.flip()
 
