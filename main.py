@@ -51,6 +51,7 @@ radius = 10 #change this to the specific amplitude i want
 
 active = True
 
+#continue in making the song and change of decibel to match 
 while active:  #while playing 
    #event handling part
     for event in pygame.event.get():
