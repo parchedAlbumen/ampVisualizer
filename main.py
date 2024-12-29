@@ -1,8 +1,21 @@
 import librosa
 import matplotlib.pyplot as plt
-import numpy as np
 import pygame
+import numpy as np
 import random
+
+vocal_file = "vocal.wav"
+song_file = "saturn.mp3"
+
+#used to extract vocal and instrumental from each other
+# from audio_separator.separator import Separator
+# # Initialize the Separator class (with optional configuration properties, below)
+# separator = Separator()
+# # Load a machine learning model (if unspecified, defaults to 'model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt')
+# separator.load_model()
+# # Perform the separation on specific audio files without reloading the model
+# output_files = separator.separate(le_file)
+# print(f"Separation complete! Output file(s): {' '.join(output_files)}")
 
 def random_col():
     rand = random.randint(1, 4)
@@ -16,10 +29,7 @@ def random_col():
         case _:
             return (0,200,10)
 
-#time series - an audio signal denoted by y; y[t] is amplitude of the waveform at sample t
-le_file = "saturn.mp3"
-#sampling rate - number of samples per second of a time series ??
-y, sr = librosa.load(le_file)
+y, sr = librosa.load(vocal_file)
 
 spectro = np.abs(librosa.stft(y))
 # print(spectro)
@@ -31,27 +41,24 @@ for i in range(spectro.shape[1]):
     highest_freq = np.max(np.abs(spectro[6:45, i])) #idk why its not [][]
     max_freq_array.append(highest_freq)
 
-max_freq_array = np.array(max_freq_array)  #yep I think i am satisfied with these values 
+max_freq_array = np.array(max_freq_array) 
 #these values are in frequencies, so convert to decibels, please 
 
 #converts the frequencies to decibels
-decibel_array = np.abs(librosa.amplitude_to_db(np.abs(max_freq_array)))
+decibel_array = np.abs(librosa.amplitude_to_db((max_freq_array)))
 
 # grabs the tempo and beat frame (wtv beatframe mean)
 tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
 beat_times = librosa.frames_to_time(beat_frames, sr=sr)
 
-duration = librosa.get_duration(y=y, sr=sr)
-
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(spectro.shape[1]), sr=sr)
-
 #animation parts
 pygame.init()
 pygame.mixer.init()
 
 #allows the song to be played here
-pygame.mixer.music.load(le_file)
+pygame.mixer.music.load(song_file)
 pygame.mixer.music.play()
 
 window = pygame.display.set_mode((500,500))
@@ -74,10 +81,17 @@ while active:  #while playing
     current_time = pygame.time.get_ticks()
     current_sec = current_time / 1000 #because current_time gets mili second
 
-    #i dont get really get this numpy part 
+    #grabs the closest index in these arrays
     decibel_index = np.searchsorted(time_array, current_sec) 
     radius = float(decibel_array[decibel_index])
-    print(radius)
+
+    #a little bit of manipulating datas so that it looks bigger or stays somewhere (probably fix the values here)
+    if radius < 19.1:
+        radius = 15
+    elif radius > 32:
+        radius += 15
+
+    # print(radius)
     pygame.draw.circle(window,(100,100,100),(circleX,circleY), radius) # DRAW CIRCLE
 
     pygame.display.flip()
@@ -86,5 +100,3 @@ while active:  #while playing
 
 pygame.quit
 
-#i want to produce 1 bubble per tempo, animation style 
-#each beat represents a decibel, the decibel tells you how big the circle is going to be 
