@@ -99,3 +99,4 @@ while active:  #while playing
 pygame.quit
 
 #next goal is to slice each and make squares and stuff for the instrumental to represent a portion of freqs
+#test
