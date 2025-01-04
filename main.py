@@ -26,21 +26,17 @@ def createNpArray(spectro_array):
 
 def convertToDecibel(array):
     return np.abs(librosa.amplitude_to_db(array))
-# def random_col():
-#     rand = random.randint(1, 4)
-#     match rand:
-#         case 1:
-#             return (200,200,200)
-#         case 2:
-#             return (100, 0 , 100)
-#         case 3: 
-#             return (0,0,200)
-#         case _:
-#             return (0,200,10)
+    
+def random_col(radius):
+    if (radius >= 40):
+        return (255,0,0)
+    elif (radius >= 25):
+        return (0,0,255)
+    else: 
+        return (0,255,0)
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
-
 
 #convert to spectro 
 vocal_spectro = np.abs(librosa.stft(y)) 
@@ -71,9 +67,8 @@ circleX = 250
 circleY = 250
 radius = 10.0 #change this to the specific amplitude i want 
 
-active = True
-
 #continue in making the song and change of decibel to match 
+active = True
 while active:  #while playing 
    #event handling part
     window.fill((0,0,0))
@@ -86,13 +81,22 @@ while active:  #while playing
 
     #grabs the closest index that represents both each time
     decibel_index = np.searchsorted(time_array, current_sec) 
-    radius = float(decibel_array_singer[decibel_index])
 
-    pygame.draw.circle(window,(100,100,100),(circleX,circleY), radius) # DRAW SINGER CIRCLE
+    singer_radius = float(decibel_array_singer[decibel_index])
+    instrumental_radius = float(decibel_array_instrumental[decibel_index])
 
+    color = random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
+    #I wanna check the decibel, so I can see how cool it's going to look like
+    print(instrumental_radius)
+
+    pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
+    pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle
+ 
     pygame.display.flip()
 
     clock.tick(60)
 
 pygame.quit
 
+#next goal is to slice each and make squares and stuff for the instrumental to represent a portion of freqs
+#test
