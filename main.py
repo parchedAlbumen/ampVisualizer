@@ -5,7 +5,7 @@ import numpy as np
 import random
 
 vocal_file = "vocal.wav"
-song_file = "saturn.mp3"
+instrumental_file = "saturn_instrumental.wav"
 
 #used to extract vocal and instrumental from each other
 # from audio_separator.separator import Separator
@@ -17,44 +17,51 @@ song_file = "saturn.mp3"
 # output_files = separator.separate(le_file)
 # print(f"Separation complete! Output file(s): {' '.join(output_files)}")   
 
-def random_col():
-    rand = random.randint(1, 4)
-    match rand:
-        case 1:
-            return (200,200,200)
-        case 2:
-            return (100, 0 , 100)
-        case 3: 
-            return (0,0,200)
-        case _:
-            return (0,200,10)
+def createNpArray(spectro_array):
+    max_freq_array = [] 
+    for i in range(spectro_array.shape[1]): 
+        highest_freq = np.max(np.abs(spectro_array[:,i])) #selects all frequencies at time i and finds the biggest
+        max_freq_array.append(highest_freq)
+    return np.array(max_freq_array)
+
+def convertToDecibel(array):
+    return np.abs(librosa.amplitude_to_db(array))
+# def random_col():
+#     rand = random.randint(1, 4)
+#     match rand:
+#         case 1:
+#             return (200,200,200)
+#         case 2:
+#             return (100, 0 , 100)
+#         case 3: 
+#             return (0,0,200)
+#         case _:
+#             return (0,200,10)
 
 y, sr = librosa.load(vocal_file)
+y1, _ = librosa.load(instrumental_file)
+
 
 #convert to spectro 
-spectro = np.abs(librosa.stft(y))
+vocal_spectro = np.abs(librosa.stft(y)) 
+instrumental_spectro = np.abs(librosa.stft(y1))
 
-#creates a simple list so I can append later
-max_freq_array_singer = []
-#grabs the highest frequency from 60hz to 260hz because I think the range of any normal singers 
-for i in range(spectro.shape[1]):
-    highest_freq = np.max(np.abs(spectro[6:45, i])) #idk why its not [][]
-    max_freq_array_singer.append(highest_freq)
-
-max_freq_array_singer = np.array(max_freq_array_singer) 
-#these values are in frequencies, so convert to decibels, please 
+max_freq_array_singer = createNpArray(vocal_spectro)
+max_freq_array_instrumental = createNpArray(instrumental_spectro)
 
 #converts the frequencies to decibels
-decibel_array_singer = np.abs(librosa.amplitude_to_db((max_freq_array_singer)))
+decibel_array_singer = convertToDecibel(max_freq_array_singer)
+decibel_array_instrumental = convertToDecibel(max_freq_array_instrumental)
 
 #change the time frame into an array of time
-time_array = librosa.frames_to_time(range(spectro.shape[1]), sr=sr)
+time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
+
 #animation parts
 pygame.init()
 pygame.mixer.init()
 
 #allows the song to be played here
-pygame.mixer.music.load(song_file)
+pygame.mixer.music.load("saturn.mp3")
 pygame.mixer.music.play()
 
 window = pygame.display.set_mode((500,500))
