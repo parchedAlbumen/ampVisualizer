@@ -15,7 +15,7 @@ song_file = "saturn.mp3"
 # separator.load_model()
 # # Perform the separation on specific audio files without reloading the model
 # output_files = separator.separate(le_file)
-# print(f"Separation complete! Output file(s): {' '.join(output_files)}")
+# print(f"Separation complete! Output file(s): {' '.join(output_files)}")   
 
 def random_col():
     rand = random.randint(1, 4)
@@ -31,25 +31,21 @@ def random_col():
 
 y, sr = librosa.load(vocal_file)
 
+#convert to spectro 
 spectro = np.abs(librosa.stft(y))
-# print(spectro)
 
 #creates a simple list so I can append later
-max_freq_array = []
+max_freq_array_singer = []
 #grabs the highest frequency from 60hz to 260hz because I think the range of any normal singers 
 for i in range(spectro.shape[1]):
     highest_freq = np.max(np.abs(spectro[6:45, i])) #idk why its not [][]
-    max_freq_array.append(highest_freq)
+    max_freq_array_singer.append(highest_freq)
 
-max_freq_array = np.array(max_freq_array) 
+max_freq_array_singer = np.array(max_freq_array_singer) 
 #these values are in frequencies, so convert to decibels, please 
 
 #converts the frequencies to decibels
-decibel_array = np.abs(librosa.amplitude_to_db((max_freq_array)))
-
-# grabs the tempo and beat frame (wtv beatframe mean)
-tempo, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
-beat_times = librosa.frames_to_time(beat_frames, sr=sr)
+decibel_array_singer = np.abs(librosa.amplitude_to_db((max_freq_array_singer)))
 
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(spectro.shape[1]), sr=sr)
@@ -79,20 +75,13 @@ while active:  #while playing
             active = False
 
     current_time = pygame.time.get_ticks()
-    current_sec = current_time / 1000 #because current_time gets mili second
+    current_sec = current_time / 1000 #convert to milisec for time array (in seconds) 
 
-    #grabs the closest index in these arrays
+    #grabs the closest index that represents both each time
     decibel_index = np.searchsorted(time_array, current_sec) 
-    radius = float(decibel_array[decibel_index])
+    radius = float(decibel_array_singer[decibel_index])
 
-    #a little bit of manipulating datas so that it looks bigger or stays somewhere (probably fix the values here)
-    if radius < 19.1:
-        radius = 15
-    elif radius > 32:
-        radius += 15
-
-    # print(radius)
-    pygame.draw.circle(window,(100,100,100),(circleX,circleY), radius) # DRAW CIRCLE
+    pygame.draw.circle(window,(100,100,100),(circleX,circleY), radius) # DRAW SINGER CIRCLE
 
     pygame.display.flip()
 
