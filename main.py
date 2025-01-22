@@ -49,6 +49,18 @@ max_freq_array_instrumental = createNpArray(instrumental_spectro)
 decibel_array_singer = convertToDecibel(max_freq_array_singer)
 decibel_array_instrumental = convertToDecibel(max_freq_array_instrumental)
 
+print(decibel_array_instrumental.shape[0])
+#make a thing here to grab each 100 hz 
+eachArray = []
+'''
+# Loop to grab segments [0:100], [101:200], [201:300], ...
+for start in range(0, len(decibel_array), segment_size):
+    end = start + segment_size
+    segment = decibel_array[start:end]
+    print(f"Segment {start}-{end-1}: {segment}")
+'''  
+#check this out bruh, idk if this is right
+
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
@@ -87,7 +99,7 @@ while active:  #while playing
 
     color = random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
     #I wanna check the decibel, so I can see how cool it's going to look like
-    print(instrumental_radius)
+    # print(instrumental_radius)  
 
     pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
     pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle
@@ -99,4 +111,4 @@ while active:  #while playing
 pygame.quit
 
 #next goal is to slice each and make squares and stuff for the instrumental to represent a portion of freqs
-#test
+#testsadasdasdasdsad
