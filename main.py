@@ -52,14 +52,11 @@ decibel_array_instrumental = convertToDecibel(max_freq_array_instrumental)
 print(decibel_array_instrumental.shape[0])
 #make a thing here to grab each 100 hz 
 eachArray = []
-'''
-# Loop to grab segments [0:100], [101:200], [201:300], ...
-for start in range(0, len(decibel_array), segment_size):
-    end = start + segment_size
-    segment = decibel_array[start:end]
-    print(f"Segment {start}-{end-1}: {segment}")
-'''  
-#check this out bruh, idk if this is right
+
+slicing_size = 500
+# for start in range(0, len(decibel_array_instrumental), slicing_size):  #(first index, last, index, spacing)
+#     end = start + slicing size
+#     segment = decibel_array[start:end]  #slices it 
 
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
@@ -99,10 +96,16 @@ while active:  #while playing
 
     color = random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
     #I wanna check the decibel, so I can see how cool it's going to look like
-    # print(instrumental_radius)  
+    print(instrumental_radius)  
 
     pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
-    pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle
+    pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
+
+    start = 0
+    for i in range(start, len(decibel_array_instrumental), slicing_size):
+        end = start + slicing_size
+        grabPortion = decibel_array_instrumental[start:end]  #literally just grabs the portion 
+        pygame.draw.circle(window, color, (350, circleY), 5 + float(grabPortion[decibel_index])) #by logic should grab eah portion and draw a circle of highest DECIBEL in that portion facts?
  
     pygame.display.flip()
 
