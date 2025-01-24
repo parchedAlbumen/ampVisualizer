@@ -17,7 +17,7 @@ instrumental_file = "saturn_instrumental.wav"
 # output_files = separator.separate(le_file)
 # print(f"Separation complete! Output file(s): {' '.join(output_files)}")   
 
-def createNpArray(spectro_array):
+def createMaxNpArray(spectro_array):
     max_freq_array = [] 
     for i in range(spectro_array.shape[1]): 
         highest_freq = np.max(np.abs(spectro_array[:,i])) #selects all frequencies at time i and finds the biggest
@@ -35,6 +35,9 @@ def random_col(radius):
     else: 
         return (0,255,0)
 
+def generateRandomY():
+    return random.randint(250, 750)
+
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
 
@@ -42,22 +45,24 @@ y1, _ = librosa.load(instrumental_file)
 vocal_spectro = np.abs(librosa.stft(y)) 
 instrumental_spectro = np.abs(librosa.stft(y1))
 
-max_freq_array_singer = createNpArray(vocal_spectro)
-max_freq_array_instrumental = createNpArray(instrumental_spectro)
+max_freq_array_singer = createMaxNpArray(vocal_spectro)
+max_freq_array_instrumental = createMaxNpArray(instrumental_spectro)
 
 #converts the frequencies to decibels
 decibel_array_singer = convertToDecibel(max_freq_array_singer)
 decibel_array_instrumental = convertToDecibel(max_freq_array_instrumental)
 
-print(decibel_array_instrumental.shape[0])
-#make a thing here to grab each 100 hz 
-eachArray = []
+theRealLebronJamesArray = []
+slicing_size = 100
+start = 0
+for i in range(start, instrumental_spectro.shape[0], slicing_size):
+    if (start + slicing_size > instrumental_spectro.shape[0]):
+        end = instrumental_spectro.shape[0] - 1
+    else:
+        end = start + slicing_size
+    theRealLebronJamesArray.append(instrumental_spectro[start:end,:])
 
-slicing_size = 500
-# for start in range(0, len(decibel_array_instrumental), slicing_size):  #(first index, last, index, spacing)
-#     end = start + slicing size
-#     segment = decibel_array[start:end]  #slices it 
-
+print(theRealLebronJamesArray)
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
@@ -69,7 +74,7 @@ pygame.mixer.init()
 pygame.mixer.music.load("saturn.mp3")
 pygame.mixer.music.play()
 
-window = pygame.display.set_mode((500,500))
+window = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 
 circleX = 250
@@ -95,23 +100,17 @@ while active:  #while playing
     instrumental_radius = float(decibel_array_instrumental[decibel_index])
 
     color = random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
-    #I wanna check the decibel, so I can see how cool it's going to look like
-    print(instrumental_radius)  
 
     pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
-    pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
+    # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
 
-    start = 0
-    for i in range(start, len(decibel_array_instrumental), slicing_size):
-        end = start + slicing_size
-        grabPortion = decibel_array_instrumental[start:end]  #literally just grabs the portion 
-        pygame.draw.circle(window, color, (350, circleY), 5 + float(grabPortion[decibel_index])) #by logic should grab eah portion and draw a circle of highest DECIBEL in that portion facts?
- 
-    pygame.display.flip()
+    #figure out how to slice the instrumental spectro
 
+    pygame.display.flip() #this is the thingy that updates it
     clock.tick(60)
 
 pygame.quit
 
-#next goal is to slice each and make squares and stuff for the instrumental to represent a portion of freqs
-#testsadasdasdasdsad
+#next goal is to separate the time bins 
+#make a playback bar thingy so that I can skip stuff 
+
