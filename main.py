@@ -1,42 +1,12 @@
 import librosa
 import matplotlib.pyplot as plt
 import pygame
-import numpy as np
+import numpy as np  
 import random
+from utility import Utility as use
 
 vocal_file = "vocal.wav"
 instrumental_file = "saturn_instrumental.wav"
-
-#used to extract vocal and instrumental from each other
-# from audio_separator.separator import Separator
-# # Initialize the Separator class (with optional configuration properties, below)
-# separator = Separator()
-# # Load a machine learning model (if unspecified, defaults to 'model_mel_band_roformer_ep_3005_sdr_11.4360.ckpt')
-# separator.load_model()
-# # Perform the separation on specific audio files without reloading the model
-# output_files = separator.separate(le_file)
-# print(f"Separation complete! Output file(s): {' '.join(output_files)}")   
-
-def createMaxNpArray(spectro_array):
-    max_freq_array = [] 
-    for i in range(spectro_array.shape[1]): 
-        highest_freq = np.max(np.abs(spectro_array[:,i])) #selects all frequencies at time i and finds the biggest
-        max_freq_array.append(highest_freq)
-    return np.array(max_freq_array)
-
-def convertToDecibel(array):
-    return np.abs(librosa.amplitude_to_db(array))
-    
-def random_col(radius):
-    if (radius >= 40):
-        return (255,0,0)
-    elif (radius >= 25):
-        return (0,0,255)
-    else: 
-        return (0,255,0)
-
-def generateRandomY():
-    return random.randint(250, 750)
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
@@ -45,12 +15,12 @@ y1, _ = librosa.load(instrumental_file)
 vocal_spectro = np.abs(librosa.stft(y)) 
 instrumental_spectro = np.abs(librosa.stft(y1))
 
-max_freq_array_singer = createMaxNpArray(vocal_spectro)
-max_freq_array_instrumental = createMaxNpArray(instrumental_spectro)
+max_freq_array_singer = use.createMaxNpArray(vocal_spectro)
+max_freq_array_instrumental = use.createMaxNpArray(instrumental_spectro)
 
 #converts the frequencies to decibels
-decibel_array_singer = convertToDecibel(max_freq_array_singer)
-decibel_array_instrumental = convertToDecibel(max_freq_array_instrumental)
+decibel_array_singer = use.convertToDecibel(max_freq_array_singer)
+decibel_array_instrumental = use.convertToDecibel(max_freq_array_instrumental)
 
 theRealLebronJamesArray = []
 slicing_size = 100
@@ -99,7 +69,7 @@ while active:  #while playing
     singer_radius = float(decibel_array_singer[decibel_index])
     instrumental_radius = float(decibel_array_instrumental[decibel_index])
 
-    color = random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
+    color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
 
     pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
     # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
