@@ -5,8 +5,8 @@ import numpy as np
 import random
 from utility import Utility as use
 
-vocal_file = "vocal.wav"
-instrumental_file = "saturn_instrumental.wav"
+vocal_file = "song_files/jen_vocals.wav"
+instrumental_file = "song_files/jen_instrumental.wav"
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
@@ -32,16 +32,15 @@ for i in range(start, instrumental_spectro.shape[0], slicing_size):
         end = start + slicing_size
     theRealLebronJamesArray.append(instrumental_spectro[start:end,:])
 
-print(theRealLebronJamesArray)
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
-#animation parts
+# animation parts
 pygame.init()
 pygame.mixer.init()
 
 #allows the song to be played here
-pygame.mixer.music.load("saturn.mp3")
+pygame.mixer.music.load("song_files/jenieve.mp3")
 pygame.mixer.music.play()
 
 window = pygame.display.set_mode((1000, 800))
