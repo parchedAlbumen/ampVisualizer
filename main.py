@@ -31,6 +31,19 @@ for i in range(start, instrumental_spectro.shape[0], slicing_size):
     else:
         end = start + slicing_size
     theRealLebronJamesArray.append(instrumental_spectro[start:end,:])
+    start += slicing_size
+
+max_freq_per_array = []
+for leArray in theRealLebronJamesArray:
+    max_freq_per_array.append(use.createMaxNpArray(leArray))
+
+max_dec_per_array = []
+for i in max_freq_per_array:
+    max_dec_per_array.append(use.convertToDecibel(i))
+
+print(max_dec_per_array)
+print(type(max_dec_per_array))
+print(len(max_dec_per_array))
 
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
@@ -80,6 +93,6 @@ while active:  #while playing
 
 pygame.quit
 
-#next goal is to separate the time bins 
 #make a playback bar thingy so that I can skip stuff 
-
+#try drawing the cirles now, make it look like trapnation vids lol
+#figure out how I wanna draw everything out and stuff
