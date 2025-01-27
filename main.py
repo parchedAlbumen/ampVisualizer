@@ -5,8 +5,8 @@ import numpy as np
 import random
 from utility import Utility as use
 
-vocal_file = "vocal.wav"
-instrumental_file = "saturn_instrumental.wav"
+vocal_file = "song_files/jen_vocals.wav"
+instrumental_file = "song_files/jen_instrumental.wav"
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
@@ -31,17 +31,29 @@ for i in range(start, instrumental_spectro.shape[0], slicing_size):
     else:
         end = start + slicing_size
     theRealLebronJamesArray.append(instrumental_spectro[start:end,:])
+    start += slicing_size
 
-print(theRealLebronJamesArray)
+max_freq_per_array = []
+for leArray in theRealLebronJamesArray:
+    max_freq_per_array.append(use.createMaxNpArray(leArray))
+
+max_dec_per_array = []
+for i in max_freq_per_array:
+    max_dec_per_array.append(use.convertToDecibel(i))
+
+print(max_dec_per_array)
+print(type(max_dec_per_array))
+print(len(max_dec_per_array))
+
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
-#animation parts
+# animation parts
 pygame.init()
 pygame.mixer.init()
 
 #allows the song to be played here
-pygame.mixer.music.load("saturn.mp3")
+pygame.mixer.music.load("song_files/jenieve.mp3")
 pygame.mixer.music.play()
 
 window = pygame.display.set_mode((1000, 800))
@@ -81,6 +93,6 @@ while active:  #while playing
 
 pygame.quit
 
-#next goal is to separate the time bins 
 #make a playback bar thingy so that I can skip stuff 
-
+#try drawing the cirles now, make it look like trapnation vids lol
+#figure out how I wanna draw everything out and stuff
