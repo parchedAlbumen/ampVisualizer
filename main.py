@@ -41,12 +41,11 @@ max_dec_per_array = []
 for i in max_freq_per_array:
     max_dec_per_array.append(use.convertToDecibel(i))
 
-print(max_dec_per_array)
-print(type(max_dec_per_array))
-print(len(max_dec_per_array))
-
 #change the time frame into an array of time
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
+
+#dont mind
+circle_y_list = [150,200,250,300,350,400,450,500,550,600,650]
 
 # animation parts
 pygame.init()
@@ -59,8 +58,8 @@ pygame.mixer.music.play()
 window = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 
-circleX = 250
-circleY = 250
+circleX = 350
+circleY = 400
 radius = 10.0 #change this to the specific amplitude i want 
 
 #continue in making the song and change of decibel to match 
@@ -79,11 +78,18 @@ while active:  #while playing
     decibel_index = np.searchsorted(time_array, current_sec) 
 
     singer_radius = float(decibel_array_singer[decibel_index])
-    instrumental_radius = float(decibel_array_instrumental[decibel_index])
+    instrumental_radius = float(decibel_array_instrumental[decibel_index])   #going to make use of this, i think
 
     color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet 
 
-    pygame.draw.circle(window,(250,250,250),(150,circleY), 5 + singer_radius) # draws vocal circle
+    pygame.draw.circle(window,(250,250,250),(circleX,circleY), 5 + singer_radius) # draws vocal circle
+    # for i in max_dec_per_array:
+    #     instrumental_portion_radius = float(i[decibel_index])
+    #     pygame.draw.cirlce(window, color, 650, )
+    for i in range(0, len(max_dec_per_array),):
+        instrumental_portion_radius = float(max_dec_per_array[i][decibel_index])
+        pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
+    
     # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
 
     #figure out how to slice the instrumental spectro
@@ -95,4 +101,3 @@ pygame.quit
 
 #make a playback bar thingy so that I can skip stuff 
 #try drawing the cirles now, make it look like trapnation vids lol
-#figure out how I wanna draw everything out and stuff
