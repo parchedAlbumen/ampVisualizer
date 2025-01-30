@@ -34,6 +34,8 @@ class Utility():
             return (0,0,255)
         else: 
             return (0,255,0)
+        
+    #i want to make a rainbow color instead of ^^^ this bs 
 
     @staticmethod
     def generateRandomY():
