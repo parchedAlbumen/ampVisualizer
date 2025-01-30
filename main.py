@@ -130,10 +130,14 @@ while active:  #while playing
     pygame.draw.circle(window,(250,250,250),(circleX,circleY), 5 + singer_radius) # draws vocal circle
     for i in range(0, len(max_dec_per_array),):
         instrumental_portion_radius = float(max_dec_per_array[i][decibel_index])
-        if (instrumental_portion_radius > 50):
-            instrumental_portion_radius = 49
-        color = use.random_col(instrumental_portion_radius + 5) #red = loud, blue = moderate, green = quiet 
-        pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
+# <<<<<<< testBranch
+#         pygame.draw.circle(window,use.random_col(instrumental_portion_radius),(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
+# =======
+#         if (instrumental_portion_radius > 50):
+#             instrumental_portion_radius = 49
+#         color = use.random_col(instrumental_portion_radius + 5) #red = loud, blue = moderate, green = quiet 
+#         pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
+# >>>>>>> main
     
     # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
     pygame.display.flip() #this is the thingy that updates it
