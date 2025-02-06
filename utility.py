@@ -2,6 +2,10 @@ import numpy as np
 import librosa
 import random
 
+#hella themes ngl (anime)
+#dumbass cats typeshit
+#good day by ice bcube
+
 #used to separate vocals and instrumentals
 #used to extract vocal and instrumental from each other
 # from audio_separator.separator import Separator
@@ -40,3 +44,7 @@ class Utility():
     @staticmethod
     def generateRandomY():
         return random.randint(250, 750)
+    
+    @staticmethod
+    def generateRandomOBlockNum():
+        return random.randint(0, 5)
