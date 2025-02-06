@@ -82,6 +82,7 @@ while active:  #while playing
     instrumental_radius = float(decibel_array_instrumental[decibel_index])   #going to make use of this, i think
 
     color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
+    pygame.draw.circle(window,(250,250,250),(circleX,circleY), 5 + singer_radius) # draws vocal circle
 
     for i in range(0, len(max_dec_per_array)):
         the_current_dec = float(max_dec_per_array[i][decibel_index])
