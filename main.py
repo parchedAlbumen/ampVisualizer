@@ -83,7 +83,6 @@ while active:  #while playing
 
     color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
 
-    pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
     for i in range(0, len(max_dec_per_array)):
         the_current_dec = float(max_dec_per_array[i][decibel_index])
         random_index = use.generateRandomOBlockNum()
@@ -103,7 +102,6 @@ while active:  #while playing
         else:
             shape_img = shape_font.render(whats_a_father, True, (255,0,0))
             window.blit(shape_img, (x_list[i], 275))
-    # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
     pygame.display.flip() #this is the thingy that updates it
     clock.tick(60)
 
