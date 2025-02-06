@@ -103,6 +103,7 @@ while active:  #while playing
         else:
             shape_img = shape_font.render(whats_a_father, True, (255,0,0))
             window.blit(shape_img, (x_list[i], 200))
+            
     pygame.display.flip() #this is the thingy that updates it
     clock.tick(60)
 
