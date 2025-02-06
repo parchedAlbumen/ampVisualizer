@@ -59,16 +59,6 @@ pygame.mixer.music.play()
 window = pygame.display.set_mode((1000, 800))
 clock = pygame.time.Clock()
 
-#probably should change all the (255,255,255), to whites lol
-text_for_vocal = pygame.font.SysFont("vocal: ", 32)
-vocal_img = text_for_vocal.render("vocal: ", True, (255,255,255))
-text_for_instrumental = pygame.font.SysFont("instrumentals: ", 32) 
-instrumental_img = text_for_instrumental.render("instrumentals: ", True,(255,255,255))
-text_for_lowest = pygame.font.SysFont("lowest hertz", 30)
-lowest_img = text_for_lowest.render("lowest", True, (255,255,255)) 
-text_for_highest = pygame.font.SysFont("highest hertz", 30)
-highest_img = text_for_highest.render("highest", True, (255,255,255))
-
 circleX = 350
 circleY = 400
 radius = 10.0 #change this to the specific amplitude i want 
@@ -82,12 +72,6 @@ while active:  #while playing
         if event.type == pygame.QUIT:
             active = False
 
-    #texts
-    window.blit(vocal_img, (315, 300))
-    window.blit(instrumental_img, (575, 75))
-    window.blit(lowest_img, (530, 150))
-    window.blit(highest_img, (525,650))
-
     current_time = pygame.time.get_ticks()
     current_sec = current_time / 1000 #convert to milisec for time array (in seconds) 
 
@@ -98,8 +82,8 @@ while active:  #while playing
     instrumental_radius = float(decibel_array_instrumental[decibel_index])   #going to make use of this, i think
 
     color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
-    
-    # pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
+
+    pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
     for i in range(0, len(max_dec_per_array)):
         the_current_dec = float(max_dec_per_array[i][decibel_index])
         random_index = use.generateRandomOBlockNum()
