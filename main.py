@@ -93,16 +93,16 @@ while active:  #while playing
 
         if the_current_dec <= 12.5:
             shape_img = shape_font.render(whats_a_father, True, (0,255,0))
-            window.blit(shape_img, (x_list[i], 200))
+            window.blit(shape_img, (x_list[i], 245))
         elif the_current_dec <= 25:
             shape_img = shape_font.render(whats_a_father, True, (0,0,255))
-            window.blit(shape_img, (x_list[i], 225))
+            window.blit(shape_img, (x_list[i], 230))
         elif the_current_dec <= 37.5: 
             shape_img = shape_font.render(whats_a_father,  True, (255,150,0))
-            window.blit(shape_img, (x_list[i], 250))
+            window.blit(shape_img, (x_list[i], 215))
         else:
             shape_img = shape_font.render(whats_a_father, True, (255,0,0))
-            window.blit(shape_img, (x_list[i], 275))
+            window.blit(shape_img, (x_list[i], 200))
     pygame.display.flip() #this is the thingy that updates it
     clock.tick(60)
 
