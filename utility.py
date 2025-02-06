@@ -40,3 +40,7 @@ class Utility():
     @staticmethod
     def generateRandomY():
         return random.randint(250, 750)
+    
+    @staticmethod
+    def generateRandomOBlockNum():
+        return random.randint(0, 5)

@@ -22,7 +22,7 @@ decibel_array_singer = use.convertToDecibel(max_freq_array_singer)
 decibel_array_instrumental = use.convertToDecibel(max_freq_array_instrumental)
 
 theRealLebronJamesArray = []
-slicing_size = 75
+slicing_size = 75 
 start = 0
 for i in range(start, instrumental_spectro.shape[0], slicing_size):
     if (start + slicing_size > instrumental_spectro.shape[0]):
@@ -46,6 +46,7 @@ time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
 #dont mind
 circle_y_list = [150,200,250,300,350,400,450,500,550,600,650]
+x_list = [100,125,150,175,200,225,250,275,300,325,350,375,400,425]
 
 # animation parts
 pygame.init()
@@ -97,36 +98,27 @@ while active:  #while playing
     instrumental_radius = float(decibel_array_instrumental[decibel_index])   #going to make use of this, i think
 
     color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
-
-    #the logic i want, i probably should change how many stuff circles i have lol, this is just temporary cuz im trying to build 
-#my logic here
-decibel_index = 0
-
-for i in range(0, len(max_dec_per_array)):
-    #instead of circle changing by size with respect radius, i want to grab the decibel at each point 
-    #and make them draw it with respect to that
-    the_current_dec = float(max_dec_per_array[i][decibel_index])
-    #i think my logic is wrong here lolooooooolololoolololooolol
-    #by this logic, this should be font size should be 24 or 25, so its perfectly aligned
-    #x, is what the list should be observing based of i
-    #y is a constant so its perfect on god
-    if the_current_dec <= 12.5:
-        #pygame
-        #you draw from the lowest, coordinate would be (x, 300) where x is i 
-    elif the_current_dec <= 25:
-        #pygame
-        #you draw from the second to lowest, coordinate would be (x, 275) where x is i
-    elif the_current_dec <= 37.5:
-        #pygame
-        #you draw from the second to highest, coordinate would be (x, 250) where x is i
-        #pygame
-    else:
-        #you draw from the highest point, coordinate would be (x, 225) where x is i 
-
-    # instrumental_portion_radius = float(max_dec_per_array[i][decibel_index]) #dont get confused, decibel index is actually the index of a time frame
-
+    
     # pygame.draw.circle(window,color,(650,circle_y_list[i]), 5 +instrumental_portion_radius) 
- 
+    for i in range(0, len(max_dec_per_array)):
+        the_current_dec = float(max_dec_per_array[i][decibel_index])
+        random_index = use.generateRandomOBlockNum()
+        whats_a_father = random_letters_list_for_rest[random_index]
+        whatsthat = random_letters_list_for_high[random_index]
+        shape_font = pygame.font.SysFont(whats_a_father, 25)
+
+        if the_current_dec <= 12.5:
+            shape_img = shape_font.render(whats_a_father, True, (0,255,0))
+            window.blit(shape_img, (x_list[i], 200))
+        elif the_current_dec <= 25:
+            shape_img = shape_font.render(whats_a_father, True, (0,0,255))
+            window.blit(shape_img, (x_list[i], 225))
+        elif the_current_dec <= 37.5: 
+            shape_img = shape_font.render(whats_a_father,  True, (255,150,0))
+            window.blit(shape_img, (x_list[i], 250))
+        else:
+            shape_img = shape_font.render(whats_a_father, True, (255,0,0))
+            window.blit(shape_img, (x_list[i], 275))
     # pygame.draw.circle(window,color,(350, circleY), 5 + instrumental_radius) #draws instrumental circle <- le current right now 
     pygame.display.flip() #this is the thingy that updates it
     clock.tick(60)
