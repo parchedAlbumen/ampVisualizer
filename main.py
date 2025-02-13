@@ -87,4 +87,4 @@ while active:  #while playing
 pygame.quit
 
 #make skip 5 seconds button
-#also clean up code so it looks less stupid
+#do more cleaning up
