@@ -128,5 +128,4 @@ while active:  #while playing
 
 pygame.quit
 
-#make a pause button 
 #make skip 5 seconds button
