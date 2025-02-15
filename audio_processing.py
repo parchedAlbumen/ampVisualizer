@@ -8,6 +8,8 @@ instrumental_file = "song_files/jen_instrumental.wav"
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
 
+duration = librosa.get_duration(y=y, sr=sr)
+
 #convert to spectro 
 vocal_spectro = np.abs(librosa.stft(y)) 
 instrumental_spectro = np.abs(librosa.stft(y1))
