@@ -3,6 +3,7 @@ import numpy as np
 from utility import Utility as use
 import audio_processing as aud
 import visual_feautures as vf
+from button import Button as butt
 
 # animation parts
 pygame.init()
@@ -12,6 +13,11 @@ window = pygame.display.set_mode((1000, 800))
 pygame.display.set_caption("What yo mama sound like")
 clock = pygame.time.Clock()
 FPS = 30
+
+#buttons
+pause_button = butt("images/WAIT.jpg", (650, 100))
+bw_button = butt("images/backward.png", (650,300))
+fw_button = butt("images/forward.webp", (650, 500))
 
 #values
 circleX = 350
@@ -31,6 +37,11 @@ while active:  #while playing
     current_time = pygame.mixer.music.get_pos()  #handles each time frame now
    #event handling part
     window.fill((0,0,0))
+    #drawing buttons 
+    pause_button.draw(window)
+    bw_button.draw(window)
+    fw_button.draw(window)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             active = False
