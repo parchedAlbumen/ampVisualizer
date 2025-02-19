@@ -18,6 +18,7 @@ FPS = 30
 pause_button = butt("images/WAIT.jpg", (650, 100))
 bw_button = butt("images/backward.png", (650,300))
 fw_button = butt("images/forward.webp", (650, 500))
+cont_button = butt("images/muah.webp", (1000,800))
 
 #values
 circleX = 350
@@ -29,6 +30,9 @@ active = True
 skipVal = 0
 current_time = 0
 
+#for pause and unpause button
+is_paused = False
+
 #allows the song to be played here
 pygame.mixer.music.load("song_files/jenieve.mp3")
 pygame.mixer.music.play()
@@ -38,25 +42,60 @@ while active:  #while playing
    #event handling part
     window.fill((0,0,0))
     #drawing buttons 
-    pause_button.draw(window)
+    if is_paused:
+        cont_button.draw(window)
+    else:
+        pause_button.draw(window)
+
     bw_button.draw(window)
     fw_button.draw(window)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             active = False
+
+        if event.type == pygame.MOUSEBUTTONDOWN:  #not gonna lie im kind of brain dead from when i was on this, so try reviewing what i did
+            if pause_button.is_pressed(event):
+                pygame.mixer_music.pause()
+                is_paused = True    
+                cont_button.changePos((650,100))
+                pause_button.changePos((1000,800))
+                print("pressed 1")
+            
+            elif cont_button.is_pressed(event):
+                pygame.mixer_music.unpause()
+                is_paused = False
+                cont_button.changePos((1000,800))
+                pause_button.changePos((650,100))
+                print("pressed 0")
+
+            if fw_button.is_pressed(event): #skip button
+                if skipVal + 2500 > aud.duration:
+                    pygame.mixer_music.rewind()  #reloop yaheard
+                    skipVal = 200
+                else:
+                    skipVal += 2500
+                pygame.mixer_music.set_pos((current_time + skipVal)/1000)
+                print("im pressed!")
+            
+            if bw_button.is_pressed(event): #rewind button
+                if (skipVal - 2500) + current_time < 0:
+                    pygame.mixer_music.rewind()
+                    skipVal = 0
+                else:
+                    skipVal -= 2500
+                pygame.mixer_music.set_pos((current_time + skipVal)/1000)
+
         if event.type == pygame.KEYDOWN: #to continue the game
             if event.key == pygame.K_o:
                 pygame.mixer.music.unpause()
-            if event.key == pygame.K_p:  #to pause the game 
-                pygame.mixer.music.pause()
             if event.key == pygame.K_d:   #go forward 2 seconds
                 if skipVal + 2500 > aud.duration:
                     pygame.mixer_music.rewind()  #reloop yaheard
                 skipVal += 2500
                 pygame.mixer_music.set_pos((current_time + skipVal)/1000)
             if event.key == pygame.K_a:  #to go backwards 
-                if (skipVal - 2500) + current_time < 0:
+                if (skipVal - 2500) + current_time <= 0:
                     pygame.mixer_music.rewind()
                     skipVal = 0
                 else:
@@ -100,4 +139,6 @@ while active:  #while playing
 
 pygame.quit
 
-#work on making a cooler design for everything now test?
+#add more designs on the waveform by adding more letters on ts
+
+#fix forward and skip button, because they seem to have big big problems
