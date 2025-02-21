@@ -20,7 +20,7 @@ class Button():
     #make the button itself function lols
     def is_pressed(self, event):
         m_pos = pygame.mouse.get_pos()
-        return self.rect.collidepoint(m_pos) and event.type == pygame.MOUSEBUTTONDOWN
+        return self.rect.collidepoint(m_pos) and event.type == pygame.MOUSEBUTTONUP
         
 
     
