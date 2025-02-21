@@ -72,6 +72,7 @@ while active:  #while playing
                 skipVal += 2.5
                 pygame.time.delay(500) 
                 pygame.mixer_music.set_pos(current_time + skipVal)
+                #hi
 
             if bw_button.is_pressed(event): #rewind button
                 if (skipVal - 2.5) + current_time <= 1:
