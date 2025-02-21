@@ -3,6 +3,7 @@ import numpy as np
 from utility import Utility as use
 import audio_processing as aud
 import visual_feautures as vf
+from button import Button as butt
 
 # animation parts
 pygame.init()
@@ -13,6 +14,12 @@ pygame.display.set_caption("What yo mama sound like")
 clock = pygame.time.Clock()
 FPS = 30
 
+#buttons
+pause_button = butt("images/WAIT.jpg", (650, 100))
+bw_button = butt("images/backward.png", (650,300))
+fw_button = butt("images/forward.webp", (650, 500))
+cont_button = butt("images/muah.webp", (1000,800))
+
 #values
 circleX = 350
 circleY = 400
@@ -21,39 +28,81 @@ active = True
 
 #skipVal
 skipVal = 0
-current_time = 0
+
+#for pause and unpause button
+is_paused = False
 
 #allows the song to be played here
 pygame.mixer.music.load("song_files/jenieve.mp3")
 pygame.mixer.music.play()
 
 while active:  #while playing 
-    current_time = pygame.mixer.music.get_pos()  #handles each time frame now
-   #event handling part
+    current_time = pygame.mixer.music.get_pos()/1000 
+
     window.fill((0,0,0))
+    #drawing buttons 
+    if is_paused:
+        cont_button.draw(window)
+    else:
+        pause_button.draw(window)
+
+    bw_button.draw(window)
+    fw_button.draw(window)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             active = False
+
+        if event.type == pygame.MOUSEBUTTONUP: 
+            if pause_button.is_pressed(event):
+                pygame.mixer_music.pause()
+                is_paused = True    
+                cont_button.changePos((650,100))
+                pause_button.changePos((1000,800))
+            
+            elif cont_button.is_pressed(event):
+                pygame.mixer_music.unpause()
+                is_paused = False
+                cont_button.changePos((1000,800))
+                pause_button.changePos((650,100))
+
+            if fw_button.is_pressed(event): #skip button
+                if (skipVal + 2.5) + current_time > aud.duration:
+                    pygame.mixer_music.rewind()
+                skipVal += 2.5
+                pygame.time.delay(500) 
+                pygame.mixer_music.set_pos(current_time + skipVal)
+                #hi
+
+            if bw_button.is_pressed(event): #rewind button
+                if (skipVal - 2.5) + current_time <= 1:
+                    skipVal = -current_time
+                    pygame.mixer_music.rewind()
+                else:
+                    skipVal -= 2.5
+                pygame.time.delay(500)
+                pygame.mixer_music.set_pos(current_time + skipVal)
+
         if event.type == pygame.KEYDOWN: #to continue the game
             if event.key == pygame.K_o:
                 pygame.mixer.music.unpause()
-            if event.key == pygame.K_p:  #to pause the game 
+            if event.key == pygame.K_p:
                 pygame.mixer.music.pause()
             if event.key == pygame.K_d:   #go forward 2 seconds
-                if skipVal + 2500 > aud.duration:
+                if skipVal + 2.5 > aud.duration:
                     pygame.mixer_music.rewind()  #reloop yaheard
-                skipVal += 2500
-                pygame.mixer_music.set_pos((current_time + skipVal)/1000)
+                skipVal += 2.5
+                pygame.mixer_music.set_pos(current_time + skipVal)
+                pygame.time.delay(500)
             if event.key == pygame.K_a:  #to go backwards 
-                if (skipVal - 2500) + current_time < 0:
+                if (skipVal - 2.5) + current_time <= 0:
                     pygame.mixer_music.rewind()
-                    skipVal = 0
+                    skipVal = -current_time
                 else:
-                    skipVal -= 2500
-                pygame.mixer_music.set_pos((current_time + skipVal)/1000)
+                    skipVal -= 2.5
+                pygame.time.delay(500)
 
-    time = current_time + skipVal
-    current_sec = time/1000
+    current_sec = current_time + skipVal
 
     #grabs the closest index that represents both each time
     decibel_index = np.searchsorted(aud.time_array, current_sec) 
@@ -89,4 +138,7 @@ while active:  #while playing
 
 pygame.quit
 
-#work on making a cooler design for everything now
+#add more designs on the waveform by adding more letters on ts
+#fix forward and skip button, because they seem to have big big problems
+#delay 500
+
