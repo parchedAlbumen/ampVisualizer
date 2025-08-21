@@ -1,2 +1,4 @@
 #ignore python bytecode and cache 
 __pycache__/
+
+venv/   
