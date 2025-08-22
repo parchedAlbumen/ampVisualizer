@@ -2,8 +2,8 @@ import librosa
 import numpy as np  
 from .utility import Utility as use
 
-vocal_file = "song_files/jen_vocals.wav"
-instrumental_file = "song_files/jen_instrumental.wav"
+vocal_file = "song_files/vocals.wav"
+instrumental_file = "song_files/instrumental.wav"
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
