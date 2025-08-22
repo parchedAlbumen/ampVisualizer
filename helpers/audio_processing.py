@@ -1,6 +1,6 @@
 import librosa
 import numpy as np  
-from utility import Utility as use
+from .utility import Utility as use
 
 vocal_file = "song_files/jen_vocals.wav"
 instrumental_file = "song_files/jen_instrumental.wav"

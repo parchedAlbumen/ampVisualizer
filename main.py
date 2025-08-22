@@ -1,9 +1,9 @@
 import pygame
 import numpy as np  
-from utility import Utility as use
-import audio_processing as aud
-import visual_feautures as vf
-from button import Button as butt
+from helpers.utility import Utility as use
+import helpers.audio_processing as aud
+import helpers.visual_feautures as vf
+from helpers.button import Button as butt
 
 # animation parts
 pygame.init()
