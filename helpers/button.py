@@ -23,4 +23,5 @@ class Button():
         return self.rect.collidepoint(m_pos) and event.type == pygame.MOUSEBUTTONUP
         
 
+#HANDLING BUTTONS IN A REALLY STUPID WAY LOL
     

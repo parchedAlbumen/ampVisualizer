@@ -30,8 +30,6 @@ class Utility():
         else: 
             return (0,255,0)
         
-    #i want to make a rainbow color instead of ^^^ this bs 
-
     @staticmethod
     def generateRandomY():
         return random.randint(250, 750)
@@ -47,16 +45,16 @@ class Utility():
             os.remove(file_path)
 
     def _extractVocalAndInstrumentals():
-        # #load model
-        # separator = Separator()
-        # separator.load_model(model_filename='model_bs_roformer_ep_368_sdr_12.9628.ckpt')
+        #load model
+        separator = Separator()
+        separator.load_model(model_filename='model_bs_roformer_ep_368_sdr_12.9628.ckpt')
 
-        # output_names = {
-        #         "Vocals": "vocals_output",
-        #         "Instrumental": "instrumental_output",
-        #         }
+        output_names = {
+                "Vocals": "vocals_output",
+                "Instrumental": "instrumentals_output",
+                }
         
-        # separator.separate('./song_files/ogAudio.wav', output_names)
+        separator.separate('./song_files/ogAudio.wav', output_names)
         shutil.move("vocals_output.wav","song_files/vocals_output.wav")
         shutil.move("instrumentals_output.wav","song_files/instrumentals_output.wav") 
 
@@ -77,11 +75,12 @@ class Utility():
         
     @staticmethod
     def addSongFiles():
-        # Utility._getSongs()
+        Utility._getSongs()
         Utility._extractVocalAndInstrumentals()
         print("added proper song files into the folder")
 
 
+#CALLABLE METHODS (PROBABLY GONNA INCREASE IN THE FUTURE)
 
         
 

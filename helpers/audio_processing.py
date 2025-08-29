@@ -2,8 +2,8 @@ import librosa
 import numpy as np  
 from .utility import Utility as use
 
-vocal_file = "song_files/vocals.wav"
-instrumental_file = "song_files/instrumental.wav"
+vocal_file = "song_files/vocals_output.wav"
+instrumental_file = "song_files/instrumentals_output.wav"
 
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
@@ -37,3 +37,5 @@ for leArray in divided_instrumentals:
 
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
 
+
+#FOR PROCESSING THE DATA SO IT CAN TURN INTO THE BUMPS
