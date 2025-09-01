@@ -5,20 +5,23 @@ from .utility import Utility as use
 vocal_file = "song_files/vocals_output.wav"
 instrumental_file = "song_files/instrumentals_output.wav"
 
+#load files
 y, sr = librosa.load(vocal_file)
 y1, _ = librosa.load(instrumental_file)
-
 duration = librosa.get_duration(y=y, sr=sr)
 
-#convert to spectro 
+#converts to magnitudes of each frame in the spectograms
 vocal_spectro = np.abs(librosa.stft(y)) 
 instrumental_spectro = np.abs(librosa.stft(y1))
 
+#creates an array of most significant magnitudes per time frame
 max_freq_array_singer = use.createMaxNpArray(vocal_spectro)
 max_freq_array_instrumental = use.createMaxNpArray(instrumental_spectro)
 
-decibel_array_singer = use.convertToDecibel(max_freq_array_singer)
-decibel_array_instrumental = use.convertToDecibel(max_freq_array_instrumental)
+#converts each frequencies into decibel
+decibel_array_singer = use.convertToDecibelSinger(max_freq_array_singer)
+#AFTER FIXING SINGER ARRAY WORK ON INSTRUMENTALS (create functions and clean it up)
+decibel_array_instrumental = use.convertToDecibelInstrumentals(max_freq_array_instrumental)
 
 divided_instrumentals = []  # array for the instrumentals 
 slicing_size = 75 
@@ -33,9 +36,8 @@ for i in range(start, instrumental_spectro.shape[0], slicing_size):
 
 max_dec_per_array = []
 for leArray in divided_instrumentals:
-    max_dec_per_array.append(use.convertToDecibel(use.createMaxNpArray(leArray)))
+    max_dec_per_array.append(use.convertToDecibelInstrumentals(use.createMaxNpArray(leArray)))
 
 time_array = librosa.frames_to_time(range(vocal_spectro.shape[1]), sr=sr)
-
 
 #FOR PROCESSING THE DATA SO IT CAN TURN INTO THE BUMPS

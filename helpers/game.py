@@ -136,12 +136,16 @@ def run_game():
             fw_button.draw(window)
 
             #grabs the closest index that represents both each time
-            decibel_index = np.searchsorted(aud.time_array, current_sec) 
-
+            decibel_index = np.searchsorted(aud.time_array, current_sec)
+            if decibel_index != 0:
+                decibel_index -= 1    
             singer_radius = float(aud.decibel_array_singer[decibel_index])
-            instrumental_radius = float(aud.decibel_array_instrumental[decibel_index])   #going to make use of this, i think
+            if singer_radius < 24:
+                singer_radius -= 5
 
-            color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
+            # instrumental_radius = float(aud.decibel_array_instrumental[decibel_index])   #going to make use of this, i think
+
+            # color = use.random_col(instrumental_radius + 5) #red = loud, blue = moderate, green = quiet
             pygame.draw.circle(window,(250,250,250),(vf.circleX, vf.circleY), 5 + singer_radius) # draws vocal circle
 
             for i in range(0, len(aud.max_dec_per_array)):
@@ -173,6 +177,7 @@ def run_game():
     pygame.quit
 
 #goals:
+#probably also fix the naming stuff
 #improve instrumental visualizer
 #put some threshold in the vocals
 #make everything look more pretty 

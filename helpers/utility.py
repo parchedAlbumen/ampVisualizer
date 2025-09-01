@@ -9,16 +9,27 @@ from pydub import AudioSegment
 path = "song_files/"
 
 class Utility():
+    #grabs the greatest magnitude per time frame and appends it to an array 
     @staticmethod
     def createMaxNpArray(spectro_array):
         max_freq_array = [] 
         for i in range(spectro_array.shape[1]): 
-            highest_freq = np.max(np.abs(spectro_array[:,i])) #selects all frequencies at time i and finds the biggest
+            highest_freq = np.max(spectro_array[:,i]) #selects all frequencies at time i and finds the biggest
             max_freq_array.append(highest_freq)
         return np.array(max_freq_array)
     
     @staticmethod
-    def convertToDecibel(array):
+    def convertToDecibelSinger(array):
+        cleaner_decibels = []
+        for i in librosa.amplitude_to_db(array):
+            if i <= 2:
+                cleaner_decibels.append(2)
+            else:
+                cleaner_decibels.append(i)
+        return cleaner_decibels
+    
+    @staticmethod
+    def convertToDecibelInstrumentals(array):
         return np.abs(librosa.amplitude_to_db(array))
     
     @staticmethod
